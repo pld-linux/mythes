@@ -1,4 +1,5 @@
 Summary:	MyThes thesaurus
+Summary(pl.UTF-8):	MyThes - słownik wyrazów bliskoznacznych
 Name:		mythes
 Version:	1.0
 Release:	1
@@ -19,21 +20,38 @@ return information on part of speech, meanings, and synonyms
 MyThes was written to provide a thesaurus for the OpenOffice.org
 project
 
+%description -l pl.UTF-8
+MyThes jest prostym słownikiem wyrazów bliskoznacznych, który
+wykorzystuje strukturalny plik danych oraz plik indeksu z
+przeszukiwaniem binarnym do znajdowania słów oraz zdań i zwracania
+informacji o części mowy, znaczeniu i synonimach.
+
+MyThes powstał w celu dostarczenia słownika wyrazów bliskoznacznych
+dla projektu OpenOffice.org.
+
 %package devel
 Summary:	Header files for MyThes library
+Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki MyThes
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Header files for MyThes library.
 
+%description -l pl.UTF-8
+Pliki nagłówkowe biblioteki MyThes.
+
 %package static
 Summary:	Static MyThes library
+Summary(pl.UTF-8):	Biblioteka statyczna MyThes
 Group:		Development/Libraries
 Requires:	%{name}-devel = %{version}-%{release}
 
 %description static
 Static MyThes library.
+
+%description -l pl.UTF-8
+Biblioteka statyczna MyThes.
 
 %prep
 %setup -q -n MyThes-%{version}
