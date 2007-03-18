@@ -1,15 +1,14 @@
-# TODO
-# - shared lib
 Summary:	MyThes thesaurus
 Name:		mythes
 Version:	1.0
-Release:	0.1
+Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	http://lingucomponent.openoffice.org/MyThes-1.zip
 # Source0-md5:	79e24a2e9a44d5d370d6685ff233064c
 Patch0:		%{name}-optflags.patch
 URL:		http://lingucomponent.openoffice.org/thesaurus.html
+BuildRequires:	libtool
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -41,9 +40,11 @@ Static MyThes library.
 %patch0 -p1
 
 %build
-%{__make} \
-	CXX="%{__cxx}" \
-	OPTFLAGS="%{rpmcflags}"
+libtool --tag=CXX --mode=compile %{__cxx} mythes.cxx -c -o mythes.lo
+libtool --tag=CXX --mode=link %{__cxx} mythes.lo -rpath %{_libdir} -o libmythes.la
+
+libtool --tag=CXX --mode=compile %{__cxx} example.cxx -c -o example.lo
+libtool --tag=CXX --mode=link %{__cxx} libmythes.la example.lo -o example
 
 %check
 ./example th_en_US_new.idx th_en_US_new.dat checkme.lst
@@ -52,18 +53,24 @@ Static MyThes library.
 rm -rf $RPM_BUILD_ROOT
 install -d $RPM_BUILD_ROOT{%{_includedir},%{_libdir}}
 install mythes.hxx $RPM_BUILD_ROOT%{_includedir}
-install libmythes.a $RPM_BUILD_ROOT%{_libdir}
+libtool --mode=install install libmythes.la $RPM_BUILD_ROOT%{_libdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+%post	-p /sbin/ldconfig
+%postun	-p /sbin/ldconfig
+
 %files
 %defattr(644,root,root,755)
 %doc README data_layout.txt
+%attr(755,root,root) %{_libdir}/libmythes.so.*.*.*
 
 %files devel
 %defattr(644,root,root,755)
 %{_includedir}/mythes.hxx
+%{_libdir}/libmythes.la
+%{_libdir}/libmythes.so
 
 %files static
 %defattr(644,root,root,755)
