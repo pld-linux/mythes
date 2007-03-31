@@ -9,7 +9,8 @@ Source0:	http://lingucomponent.openoffice.org/MyThes-1.zip
 # Source0-md5:	79e24a2e9a44d5d370d6685ff233064c
 Patch0:		%{name}-optflags.patch
 URL:		http://lingucomponent.openoffice.org/thesaurus.html
-BuildRequires:	libtool
+BuildRequires:	libstdc++-devel
+BuildRequires:	libtool >= 2:1.5
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -34,6 +35,7 @@ Summary:	Header files for MyThes library
 Summary(pl.UTF-8):	Pliki nagłówkowe biblioteki MyThes
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Requires:	libstdc++-devel
 
 %description devel
 Header files for MyThes library.
@@ -86,9 +88,9 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
-%{_includedir}/mythes.hxx
+%attr(755,root,root) %{_libdir}/libmythes.so
 %{_libdir}/libmythes.la
-%{_libdir}/libmythes.so
+%{_includedir}/mythes.hxx
 
 %files static
 %defattr(644,root,root,755)
