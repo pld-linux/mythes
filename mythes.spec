@@ -60,10 +60,11 @@ Biblioteka statyczna MyThes.
 %patch0 -p1
 
 %build
-libtool --tag=CXX --mode=compile %{__cxx} mythes.cxx -c -o mythes.lo
+CXXFLAGS="-Wall -ansi -pedantic %{rpmcxxflags}"
+libtool --tag=CXX --mode=compile %{__cxx} mythes.cxx $CXXFLAGS -c -o mythes.lo
 libtool --tag=CXX --mode=link %{__cxx} mythes.lo -rpath %{_libdir} -o libmythes.la
 
-libtool --tag=CXX --mode=compile %{__cxx} example.cxx -c -o example.lo
+libtool --tag=CXX --mode=compile %{__cxx} example.cxx $CXXFLAGS -c -o example.lo
 libtool --tag=CXX --mode=link %{__cxx} libmythes.la example.lo -o example
 
 %check
