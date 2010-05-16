@@ -11,6 +11,7 @@ Patch0:		%{name}-optflags.patch
 URL:		http://lingucomponent.openoffice.org/thesaurus.html
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:1.5
+BuildRequires:	unzip
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
