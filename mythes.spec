@@ -41,7 +41,7 @@ Requires:	libstdc++-devel
 %description devel
 Header files for MyThes library.
 
-%description -l pl.UTF-8
+%description devel -l pl.UTF-8
 Pliki nagłówkowe biblioteki MyThes.
 
 %package static
@@ -53,7 +53,7 @@ Requires:	%{name}-devel = %{version}-%{release}
 %description static
 Static MyThes library.
 
-%description -l pl.UTF-8
+%description static -l pl.UTF-8
 Biblioteka statyczna MyThes.
 
 %prep
