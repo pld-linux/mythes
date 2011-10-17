@@ -1,14 +1,16 @@
+%bcond_without	tests
 Summary:	MyThes thesaurus
 Summary(pl.UTF-8):	MyThes - słownik wyrazów bliskoznacznych
 Name:		mythes
-Version:	1.0
+Version:	1.2.1
 Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	http://lingucomponent.openoffice.org/MyThes-1.zip
-# Source0-md5:	79e24a2e9a44d5d370d6685ff233064c
-Patch0:		%{name}-optflags.patch
+Source0:	http://downloads.sourceforge.net/hunspell/%{name}-%{version}.tar.gz
+# Source0-md5:	54b310488dda6929cf31ae859928c945
+Patch0:		%{name}-1.2.1-rhbz675806.patch
 URL:		http://lingucomponent.openoffice.org/thesaurus.html
+BuildRequires:	hunspell-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:1.5
 BuildRequires:	unzip
@@ -57,25 +59,25 @@ Static MyThes library.
 Biblioteka statyczna MyThes.
 
 %prep
-%setup -q -n MyThes-%{version}
-%patch0 -p1
+%setup -q
+%patch0 -p0
 
 %build
-CXXFLAGS="-Wall -ansi -pedantic %{rpmcxxflags}"
-libtool --tag=CXX --mode=compile %{__cxx} mythes.cxx $CXXFLAGS -c -o mythes.lo
-libtool --tag=CXX --mode=link %{__cxx} mythes.lo -rpath %{_libdir} -o libmythes.la
+%configure
+%{__make}
 
-libtool --tag=CXX --mode=compile %{__cxx} example.cxx $CXXFLAGS -c -o example.lo
-libtool --tag=CXX --mode=link %{__cxx} libmythes.la example.lo -o example
-
-%check
+%if %{with tests}
 ./example th_en_US_new.idx th_en_US_new.dat checkme.lst
+./example morph.idx morph.dat morph.lst morph.aff morph.dic
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_includedir},%{_libdir}}
-install mythes.hxx $RPM_BUILD_ROOT%{_includedir}
-libtool --mode=install install libmythes.la $RPM_BUILD_ROOT%{_libdir}
+
+%{__make} install \
+	DESTDIR=$RPM_BUILD_ROOT
+
+rm $RPM_BUILD_ROOT/%{_libdir}/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -86,14 +88,14 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %doc README data_layout.txt
-%attr(755,root,root) %{_libdir}/libmythes.so.*.*.*
+%attr(755,root,root) %{_libdir}/libmythes-*.so.*.*.*
 
 %files devel
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_libdir}/libmythes.so
-%{_libdir}/libmythes.la
+%attr(755,root,root) %{_libdir}/libmythes-*.so
 %{_includedir}/mythes.hxx
+%{_pkgconfigdir}/mythes.pc
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libmythes.a
+%{_libdir}/libmythes-*.a
