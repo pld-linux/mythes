@@ -92,6 +92,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files devel
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/th_gen_idx.pl
 %attr(755,root,root) %{_libdir}/libmythes-*.so
 %{_includedir}/mythes.hxx
 %{_pkgconfigdir}/mythes.pc
