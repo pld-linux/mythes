@@ -2,13 +2,12 @@
 Summary:	MyThes thesaurus
 Summary(pl.UTF-8):	MyThes - słownik wyrazów bliskoznacznych
 Name:		mythes
-Version:	1.2.1
+Version:	1.2.3
 Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/hunspell/%{name}-%{version}.tar.gz
-# Source0-md5:	54b310488dda6929cf31ae859928c945
-Patch0:		%{name}-1.2.1-rhbz675806.patch
+# Source0-md5:	46e92b68e31e858512b680b3b61dc4c1
 URL:		http://lingucomponent.openoffice.org/thesaurus.html
 BuildRequires:	hunspell-devel
 BuildRequires:	libstdc++-devel
@@ -60,7 +59,6 @@ Biblioteka statyczna MyThes.
 
 %prep
 %setup -q
-%patch0 -p0
 
 %build
 %configure
@@ -89,6 +87,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %doc README data_layout.txt
 %attr(755,root,root) %{_libdir}/libmythes-*.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libmythes-*.so.0
 
 %files devel
 %defattr(644,root,root,755)
