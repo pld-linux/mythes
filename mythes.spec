@@ -1,27 +1,31 @@
-%bcond_without	tests
+#
+# Conditional build
+%bcond_without	tests	# example testing
+#
 Summary:	MyThes thesaurus
 Summary(pl.UTF-8):	MyThes - słownik wyrazów bliskoznacznych
 Name:		mythes
-Version:	1.2.3
+Version:	1.2.4
 Release:	1
 License:	BSD
 Group:		Libraries
 Source0:	http://downloads.sourceforge.net/hunspell/%{name}-%{version}.tar.gz
-# Source0-md5:	46e92b68e31e858512b680b3b61dc4c1
+# Source0-md5:	a8c2c5b8f09e7ede322d5c602ff6a4b6
 URL:		http://lingucomponent.openoffice.org/thesaurus.html
 BuildRequires:	hunspell-devel
 BuildRequires:	libstdc++-devel
 BuildRequires:	libtool >= 2:1.5
+BuildRequires:	pkgconfig
 BuildRequires:	unzip
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 MyThes is a simple thesaurus that uses a structured text data file and
 an index file with binary search to lookup words and phrases and
-return information on part of speech, meanings, and synonyms
+return information on part of speech, meanings, and synonyms.
 
 MyThes was written to provide a thesaurus for the OpenOffice.org
-project
+project.
 
 %description -l pl.UTF-8
 MyThes jest prostym słownikiem wyrazów bliskoznacznych, który
@@ -75,7 +79,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm $RPM_BUILD_ROOT/%{_libdir}/*.la
+%{__rm} $RPM_BUILD_ROOT%{_libdir}/*.la
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -85,17 +89,17 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc README data_layout.txt
-%attr(755,root,root) %{_libdir}/libmythes-*.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libmythes-*.so.0
+%doc AUTHORS COPYING ChangeLog README WordNet_{license,readme}.txt data_layout.txt
+%attr(755,root,root) %{_libdir}/libmythes-1.2.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libmythes-1.2.so.0
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/th_gen_idx.pl
-%attr(755,root,root) %{_libdir}/libmythes-*.so
+%attr(755,root,root) %{_libdir}/libmythes-1.2.so
 %{_includedir}/mythes.hxx
 %{_pkgconfigdir}/mythes.pc
 
 %files static
 %defattr(644,root,root,755)
-%{_libdir}/libmythes-*.a
+%{_libdir}/libmythes-1.2.a
