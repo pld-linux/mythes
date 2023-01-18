@@ -1,20 +1,24 @@
 #
 # Conditional build
-%bcond_without	tests	# example testing
+%bcond_without	static_libs	# static library
+%bcond_without	tests		# example testing
 #
 Summary:	MyThes thesaurus
 Summary(pl.UTF-8):	MyThes - słownik wyrazów bliskoznacznych
 Name:		mythes
-Version:	1.2.4
+Version:	1.2.5
 Release:	1
 License:	BSD
 Group:		Libraries
-Source0:	http://downloads.sourceforge.net/hunspell/%{name}-%{version}.tar.gz
-# Source0-md5:	a8c2c5b8f09e7ede322d5c602ff6a4b6
+#Source0Download: https://github.com/hunspell/mythes/releases
+Source0:	https://github.com/hunspell/mythes/archive/v%{version}/%{name}-%{version}.tar.gz
+# Source0-md5:	35d91f6d9d5e1be3388aaddd63bc4d86
 URL:		http://lingucomponent.openoffice.org/thesaurus.html
+BuildRequires:	autoconf >= 2.65
+BuildRequires:	automake >= 1:1.11
 BuildRequires:	hunspell-devel
 BuildRequires:	libstdc++-devel
-BuildRequires:	libtool >= 2:1.5
+BuildRequires:	libtool >= 2:2
 BuildRequires:	pkgconfig
 BuildRequires:	unzip
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -65,10 +69,20 @@ Biblioteka statyczna MyThes.
 %setup -q
 
 %build
-%configure
+%{__libtoolize}
+%{__aclocal} -I m4
+%{__autoconf}
+%{__autoheader}
+%{__automake}
+%configure \
+	--disable-silent-rules \
+	%{?with_static_libs:--enable-static}
+
 %{__make}
 
 %if %{with tests}
+%{__make} check
+
 ./example th_en_US_new.idx th_en_US_new.dat checkme.lst
 ./example morph.idx morph.dat morph.lst morph.aff morph.dic
 %endif
@@ -89,7 +103,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%doc AUTHORS COPYING ChangeLog README WordNet_{license,readme}.txt data_layout.txt
+%doc AUTHORS COPYING README WordNet_{license,readme}.txt data_layout.txt
 %attr(755,root,root) %{_libdir}/libmythes-1.2.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libmythes-1.2.so.0
 
@@ -100,6 +114,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/mythes.hxx
 %{_pkgconfigdir}/mythes.pc
 
+%if %{with static_libs}
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libmythes-1.2.a
+%endif
